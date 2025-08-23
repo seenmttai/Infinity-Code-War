@@ -7,129 +7,63 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Orbitron:wght@400;700&display=swap');
-
         :root {
-            --stark-dark-bg: #111827;
-            --stark-panel-bg: #1F2937;
-            --stark-border: #4B5563;
-            --stark-glow: #00BFFF;
-            --stark-gold: #FFD700;
-            --stark-red: #DC2626;
-            --stark-text: #E5E7EB;
+            --stark-dark-bg: #111827; --stark-panel-bg: #1F2937; --stark-border: #4B5563;
+            --stark-glow: #00BFFF; --stark-gold: #FFD700; --stark-red: #DC2626; --stark-text: #E5E7EB;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
-            font-family: 'Orbitron', sans-serif;
-            background-color: var(--stark-dark-bg);
-            color: var(--stark-text);
-            background-image:
-                linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)),
-                url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            padding: 2rem;
+            font-family: 'Orbitron', sans-serif; background-color: var(--stark-dark-bg); color: var(--stark-text);
+            background-image: linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)), url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 2rem;
         }
-
         .container {
-            width: 100%;
-            max-width: 800px;
-            background: var(--stark-panel-bg);
-            border: 2px solid var(--stark-glow);
-            border-radius: 10px;
-            box-shadow: 0 0 25px rgba(0, 191, 255, 0.5);
-            padding: 2rem;
-            text-align: center;
+            width: 100%; max-width: 800px; background: var(--stark-panel-bg); border: 2px solid var(--stark-glow);
+            border-radius: 10px; box-shadow: 0 0 25px rgba(0, 191, 255, 0.5); padding: 2rem; text-align: center;
         }
-
         h1 {
-            color: var(--stark-glow);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 0.5rem;
+            color: var(--stark-glow); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 0.5rem;
             text-shadow: 0 0 10px var(--stark-glow);
         }
-
         .subtitle { font-size: 1rem; color: var(--stark-gold); margin-bottom: 2rem; }
-
         .hidden { display: none !important; }
-
-        #participantSelector {
-            max-height: 60vh;
-            overflow-y: auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
+        .search-box {
+            width: 100%; padding: 0.75rem; margin-bottom: 2rem; background: var(--stark-dark-bg);
+            border: 1px solid var(--stark-border); border-radius: 5px; color: var(--stark-text);
+            font-family: 'Orbitron', sans-serif; font-size: 1rem; transition: all 0.3s ease;
         }
+        .search-box:focus { outline: none; border-color: var(--stark-glow); box-shadow: 0 0 10px var(--stark-glow); }
+        #participantSelector { max-height: 60vh; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
         #participantSelector::-webkit-scrollbar { width: 8px; }
         #participantSelector::-webkit-scrollbar-track { background: var(--stark-dark-bg); }
         #participantSelector::-webkit-scrollbar-thumb { background-color: var(--stark-glow); border-radius: 10px; border: 2px solid var(--stark-dark-bg); }
-
         .participant-btn {
-            background: transparent;
-            border: 1px solid var(--stark-border);
-            color: var(--stark-text);
-            padding: 1rem;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            background: transparent; border: 1px solid var(--stark-border); color: var(--stark-text); padding: 1rem;
+            font-family: 'Orbitron', sans-serif; font-size: 1rem; border-radius: 5px; cursor: pointer; transition: all 0.3s ease;
         }
-        .participant-btn:hover {
-            border-color: var(--stark-glow);
-            background-color: rgba(0, 191, 255, 0.1);
-            color: var(--stark-glow);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 191, 255, 0.2);
-        }
-
+        .participant-btn:hover { border-color: var(--stark-glow); background-color: rgba(0, 191, 255, 0.1); color: var(--stark-glow); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 191, 255, 0.2); }
         .form-group { margin-bottom: 1.5rem; text-align: left; }
         label { display: block; margin-bottom: 0.5rem; font-weight: bold; color: var(--stark-glow); }
         .form-control {
-            width: 100%;
-            padding: 0.75rem;
-            background: var(--stark-dark-bg);
-            border: 1px solid var(--stark-border);
-            border-radius: 5px;
-            color: var(--stark-text);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            width: 100%; padding: 0.75rem; background: var(--stark-dark-bg); border: 1px solid var(--stark-border);
+            border-radius: 5px; color: var(--stark-text); font-family: 'Orbitron', sans-serif; font-size: 1rem; transition: all 0.3s ease;
         }
         .form-control:focus { outline: none; border-color: var(--stark-glow); box-shadow: 0 0 10px var(--stark-glow); }
         textarea.form-control { resize: vertical; min-height: 100px; }
-
         .rating-stars { display: flex; justify-content: center; margin-bottom: 1.5rem; }
         .star { font-size: 2.5rem; color: var(--stark-border); cursor: pointer; transition: color 0.2s; padding: 0 0.5rem; }
         .star:hover, .star.selected { color: var(--stark-gold); text-shadow: 0 0 10px var(--stark-gold); }
-        
         #certificateCanvas { max-width: 100%; border-radius: 5px; border: 1px solid var(--stark-border); }
         .btn {
-            padding: 0.75rem 1.5rem;
-            font-family: 'Orbitron', sans-serif;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            font-size: 1rem;
-            background-color: var(--stark-glow);
-            color: var(--stark-dark-bg);
-            box-shadow: 0 0 10px var(--stark-glow);
-            margin-top: 1rem;
+            padding: 0.75rem 1.5rem; font-family: 'Orbitron', sans-serif; border: none; border-radius: 5px; cursor: pointer;
+            font-weight: bold; transition: all 0.3s ease; text-transform: uppercase; font-size: 1rem;
+            background-color: var(--stark-glow); color: var(--stark-dark-bg); box-shadow: 0 0 10px var(--stark-glow); margin-top: 1rem;
         }
         .btn:hover { filter: brightness(1.2); }
         .btn:disabled { background-color: var(--stark-border); cursor: not-allowed; box-shadow: none; }
         .thank-you-message { font-size: 1.5rem; color: var(--stark-gold); margin-bottom: 1.5rem; }
-
         .loader { border: 5px solid var(--stark-border); border-top: 5px solid var(--stark-glow); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 2rem auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
         .floating-btn { position: fixed; bottom: 20px; right: 20px; background-color: var(--stark-glow); color: var(--stark-dark-bg); padding: 10px 15px; border-radius: 50px; font-size: 0.9rem; box-shadow: 0 0 15px var(--stark-glow); text-decoration: none; font-weight: bold; z-index: 1000; }
         .heart { display: inline-block; animation: blink 1s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
@@ -139,11 +73,11 @@
     <div class="container">
         <div id="step1">
             <h1>SELECT YOUR PROFILE</h1>
-            <p class="subtitle">Identify yourself to proceed.</p>
+            <p class="subtitle">by GFG Student Chapter Amity University Noida</p>
+            <input type="text" id="participantSearch" class="search-box" placeholder="Search your name to begin...">
             <div id="loader" class="loader"></div>
             <div id="participantSelector"></div>
         </div>
-
         <div id="step2" class="hidden">
             <h1>MISSION DEBRIEF</h1>
             <p class="subtitle" id="welcomeMessage"></p>
@@ -151,11 +85,7 @@
                 <div class="form-group">
                     <label>Rate Your Experience</label>
                     <div class="rating-stars" id="ratingStars">
-                        <span class="star" data-value="1">★</span>
-                        <span class="star" data-value="2">★</span>
-                        <span class="star" data-value="3">★</span>
-                        <span class="star" data-value="4">★</span>
-                        <span class="star" data-value="5">★</span>
+                        <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
                     </div>
                     <input type="hidden" id="rating" name="rating" value="0">
                 </div>
@@ -170,7 +100,6 @@
                 <button type="submit" class="btn" id="submitBtn">Submit Debrief</button>
             </form>
         </div>
-
         <div id="step3" class="hidden">
             <h1>ARTIFACT ACQUIRED</h1>
             <p class="thank-you-message">Thank you for your valuable feedback!</p>
@@ -178,48 +107,44 @@
             <button id="downloadBtn" class="btn">Download Certificate</button>
         </div>
     </div>
-    
-    <a href="https://github.com/seenmttai" target="_blank" class="floating-btn">
+    <a href="https://github.com/manan-bhansali" target="_blank" class="floating-btn">
         Created by Manan Bhansali <span class="heart">❤️</span>
     </a>
-
     <script>
         const SUPABASE_URL = 'https://vekkziumelqjndunkpxj.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla2t6aXVtZWxxam5kdW5rcHhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk2MTE3MzgsImV4cCI6MjA1NTE4NzczOH0.XWPYixmR7C_TOLh0Ai7HFmGU07Sa2ryZxeEqrd4zwGg';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const step1 = document.getElementById('step1');
         const step2 = document.getElementById('step2');
         const step3 = document.getElementById('step3');
         const loader = document.getElementById('loader');
         const participantSelector = document.getElementById('participantSelector');
+        const participantSearch = document.getElementById('participantSearch');
         const welcomeMessage = document.getElementById('welcomeMessage');
         const feedbackForm = document.getElementById('feedbackForm');
         const submitBtn = document.getElementById('submitBtn');
-
         let selectedParticipant = null;
-
+        let allParticipants = [];
         async function loadParticipants() {
             loader.style.display = 'block';
             participantSelector.innerHTML = '';
-            const { data, error } = await supabaseClient
-                .from('participants')
-                .select('*')
-                .eq('is_present', true)
-                .order('name', { ascending: true });
-
+            const { data, error } = await supabase.from('participants').select('*').eq('is_present', true).order('name', { ascending: true });
             loader.style.display = 'none';
             if (error) {
                 console.error('Error fetching participants:', error);
                 participantSelector.innerHTML = `<p style="color: var(--stark-red);">Error loading participants.</p>`;
                 return;
             }
-
-            if (data.length === 0) {
-                participantSelector.innerHTML = `<p>No present participants found. Please get your attendance marked first.</p>`;
+            allParticipants = data;
+            renderParticipants(allParticipants);
+        }
+        function renderParticipants(participants) {
+            participantSelector.innerHTML = '';
+            if (participants.length === 0) {
+                participantSelector.innerHTML = `<p>No present participants found. Please get your attendance marked first or check your search term.</p>`;
+                return;
             }
-
-            data.forEach(p => {
+            participants.forEach(p => {
                 const btn = document.createElement('button');
                 btn.className = 'participant-btn';
                 btn.textContent = p.name;
@@ -227,49 +152,44 @@
                 participantSelector.appendChild(btn);
             });
         }
-
+        participantSearch.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = allParticipants.filter(p => p.name.toLowerCase().includes(searchTerm));
+            renderParticipants(filtered);
+        });
         function selectParticipant(participant) {
             selectedParticipant = participant;
             step1.classList.add('hidden');
             step2.classList.remove('hidden');
             welcomeMessage.textContent = `Welcome, ${participant.name}.`;
         }
-        
         const ratingStars = document.getElementById('ratingStars');
         const stars = ratingStars.querySelectorAll('.star');
         const ratingInput = document.getElementById('rating');
-
         stars.forEach(star => {
             star.addEventListener('click', () => {
                 const value = star.getAttribute('data-value');
                 ratingInput.value = value;
-                stars.forEach(s => {
-                    s.classList.toggle('selected', s.getAttribute('data-value') <= value);
-                });
+                stars.forEach(s => { s.classList.toggle('selected', s.getAttribute('data-value') <= value); });
             });
         });
-
         feedbackForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
-
             const feedbackData = {
                 participant_id: selectedParticipant.id,
                 rating: parseInt(document.getElementById('rating').value),
                 liked: document.getElementById('liked').value,
                 improvement: document.getElementById('improvement').value
             };
-
-            if(feedbackData.rating === 0) {
+            if (feedbackData.rating === 0) {
                 alert('Please provide a rating by clicking the stars.');
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Submit Debrief';
                 return;
             }
-
-            const { error } = await supabaseClient.from('feedback').insert([feedbackData]);
-
+            const { error } = await supabase.from('feedback').insert([feedbackData]);
             if (error) {
                 console.error('Error submitting feedback:', error);
                 alert('Failed to submit feedback. Please try again.');
@@ -281,43 +201,31 @@
                 generateCertificate(selectedParticipant.name);
             }
         });
-
         async function generateCertificate(name) {
             const canvas = document.getElementById('certificateCanvas');
             const ctx = canvas.getContext('2d');
             const img = new Image();
-            img.src = 'certificate.png';
+            img.src = 'certificate.jpeg';
             img.onload = () => {
                 canvas.width = img.width;
                 canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
-
                 const textConfig = {
-                    font: "bold 60px 'Audiowide', sans-serif",
-                    color: '#1F2937', 
-                    align: 'center',
-                    baseline: 'middle',
-                    x: canvas.width / 2, 
-                    y: canvas.height / 2.1 
+                    font: "bold 60px 'Audiowide', sans-serif", color: '#1F2937', align: 'center',
+                    baseline: 'middle', x: canvas.width / 2, y: canvas.height / 2.1
                 };
-
                 ctx.font = textConfig.font;
                 ctx.fillStyle = textConfig.color;
                 ctx.textAlign = textConfig.align;
                 ctx.textBaseline = textConfig.baseline;
-
                 ctx.fillText(name.toUpperCase(), textConfig.x, textConfig.y);
             };
             img.onerror = () => {
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0,0, canvas.width, canvas.height);
-                ctx.fillStyle = 'red';
-                ctx.textAlign = 'center';
-                ctx.font = '30px sans-serif';
-                ctx.fillText('Error: certificate.jpeg not found.', canvas.width/2, canvas.height/2);
+                ctx.fillStyle = 'white'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'red'; ctx.textAlign = 'center'; ctx.font = '30px sans-serif';
+                ctx.fillText('Error: certificate.jpeg not found.', canvas.width / 2, canvas.height / 2);
             }
         }
-        
         document.getElementById('downloadBtn').addEventListener('click', () => {
             const canvas = document.getElementById('certificateCanvas');
             const link = document.createElement('a');
@@ -325,7 +233,6 @@
             link.href = canvas.toDataURL('image/png');
             link.click();
         });
-
         document.addEventListener('DOMContentLoaded', loadParticipants);
     </script>
 </body>

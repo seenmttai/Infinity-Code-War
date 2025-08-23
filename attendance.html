@@ -7,234 +7,81 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-
         :root {
-            --stark-dark-bg: #111827;
-            --stark-panel-bg: #1F2937;
-            --stark-border: #4B5563;
-            --stark-glow: #00BFFF;
-            --stark-gold: #FFD700;
-            --stark-red: #DC2626;
-            --stark-text: #E5E7EB;
+            --stark-dark-bg: #111827; --stark-panel-bg: #1F2937; --stark-border: #4B5563;
+            --stark-glow: #00BFFF; --stark-gold: #FFD700; --stark-red: #DC2626; --stark-text: #E5E7EB;
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Orbitron', sans-serif;
-            background-color: var(--stark-dark-bg);
-            color: var(--stark-text);
-            background-image:
-                linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)),
-                url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            padding: 2rem;
+            font-family: 'Orbitron', sans-serif; background-color: var(--stark-dark-bg); color: var(--stark-text);
+            background-image: linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)), url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 2rem;
         }
-
         .container {
-            width: 100%;
-            max-width: 800px;
-            background: var(--stark-panel-bg);
-            border: 2px solid var(--stark-glow);
-            border-radius: 10px;
-            box-shadow: 0 0 25px rgba(0, 191, 255, 0.5);
-            padding: 2rem;
-            text-align: center;
+            width: 100%; max-width: 800px; background: var(--stark-panel-bg); border: 2px solid var(--stark-glow);
+            border-radius: 10px; box-shadow: 0 0 25px rgba(0, 191, 255, 0.5); padding: 2rem; text-align: center;
         }
-
         h1 {
-            color: var(--stark-glow);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 0.5rem;
+            color: var(--stark-glow); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 0.5rem;
             text-shadow: 0 0 10px var(--stark-glow);
         }
-
-        .subtitle {
-            font-size: 1rem;
-            color: var(--stark-gold);
-            margin-bottom: 2rem;
-        }
-
+        .subtitle { font-size: 1rem; color: var(--stark-gold); margin-bottom: 2rem; }
         .search-box {
-            width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 2rem;
-            background: var(--stark-dark-bg);
-            border: 1px solid var(--stark-border);
-            border-radius: 5px;
-            color: var(--stark-text);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            width: 100%; padding: 0.75rem; margin-bottom: 2rem; background: var(--stark-dark-bg);
+            border: 1px solid var(--stark-border); border-radius: 5px; color: var(--stark-text);
+            font-family: 'Orbitron', sans-serif; font-size: 1rem; transition: all 0.3s ease;
         }
-
-        .search-box:focus {
-            outline: none;
-            border-color: var(--stark-glow);
-            box-shadow: 0 0 10px var(--stark-glow);
-        }
-        
-        .participant-list-container {
-            max-height: 50vh;
-            overflow-y: auto;
-            border: 1px solid var(--stark-border);
-            border-radius: 5px;
-            padding: 0.5rem;
-        }
-
-        .participant-list-container::-webkit-scrollbar {
-            width: 8px;
-        }
-        .participant-list-container::-webkit-scrollbar-track {
-            background: var(--stark-dark-bg);
-        }
-        .participant-list-container::-webkit-scrollbar-thumb {
-            background-color: var(--stark-glow);
-            border-radius: 10px;
-            border: 2px solid var(--stark-dark-bg);
-        }
-
-        .participant-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            border-bottom: 1px solid var(--stark-border);
-            transition: background-color 0.3s ease;
-        }
-        
-        .participant-item:last-child {
-            border-bottom: none;
-        }
-
-        .participant-item:hover {
-            background-color: rgba(0, 191, 255, 0.1);
-        }
-
-        .participant-name {
-            font-size: 1.1rem;
-            text-align: left;
-        }
-        
-        .status-btn {
-            padding: 0.5rem 1rem;
-            font-family: 'Orbitron', sans-serif;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-        }
-
-        .present {
-            background-color: var(--stark-glow);
-            color: var(--stark-dark-bg);
-            box-shadow: 0 0 10px var(--stark-glow);
-        }
-
-        .absent {
-            background-color: var(--stark-red);
-            color: var(--stark-text);
-        }
-        
-        .absent:hover {
-            background-color: #F87171;
-        }
-        
-        .loader {
-            border: 5px solid var(--stark-border);
-            border-top: 5px solid var(--stark-glow);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 2rem auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .floating-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: var(--stark-glow);
-            color: var(--stark-dark-bg);
-            padding: 10px 15px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            box-shadow: 0 0 15px var(--stark-glow);
-            text-decoration: none;
-            font-weight: bold;
-            z-index: 1000;
-        }
-
-        .heart {
-            display: inline-block;
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
+        .search-box:focus { outline: none; border-color: var(--stark-glow); box-shadow: 0 0 10px var(--stark-glow); }
+        .participant-list-container { max-height: 50vh; overflow-y: auto; border: 1px solid var(--stark-border); border-radius: 5px; padding: 0.5rem; }
+        .participant-list-container::-webkit-scrollbar { width: 8px; }
+        .participant-list-container::-webkit-scrollbar-track { background: var(--stark-dark-bg); }
+        .participant-list-container::-webkit-scrollbar-thumb { background-color: var(--stark-glow); border-radius: 10px; border: 2px solid var(--stark-dark-bg); }
+        .participant-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-bottom: 1px solid var(--stark-border); transition: background-color 0.3s ease; }
+        .participant-item:last-child { border-bottom: none; }
+        .participant-item:hover { background-color: rgba(0, 191, 255, 0.1); }
+        .participant-name { font-size: 1.1rem; text-align: left; }
+        .status-btn { padding: 0.5rem 1rem; font-family: 'Orbitron', sans-serif; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: all 0.3s ease; text-transform: uppercase; min-width: 140px; }
+        .present { background-color: var(--stark-glow); color: var(--stark-dark-bg); box-shadow: 0 0 10px var(--stark-glow); }
+        .present:hover { filter: brightness(1.2); }
+        .absent { background-color: var(--stark-red); color: var(--stark-text); }
+        .absent:hover { background-color: #F87171; }
+        .loader { border: 5px solid var(--stark-border); border-top: 5px solid var(--stark-glow); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 2rem auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .floating-btn { position: fixed; bottom: 20px; right: 20px; background-color: var(--stark-glow); color: var(--stark-dark-bg); padding: 10px 15px; border-radius: 50px; font-size: 0.9rem; box-shadow: 0 0 15px var(--stark-glow); text-decoration: none; font-weight: bold; z-index: 1000; }
+        .heart { display: inline-block; animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
         @media (max-width: 768px) {
-            body { padding: 1rem; }
-            .container { padding: 1rem; }
+            body { padding: 1rem; } .container { padding: 1rem; }
             .participant-item { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
             .status-btn { width: 100%; }
         }
-
     </style>
 </head>
 <body>
-
     <div class="container">
-        <h1>ATTENDANCE PROTOCOL</h1>
-        <p class="subtitle">INFINITY CODE WAR</p>
-
+        <h1>INFINITY CODE WAR</h1>
+        <p class="subtitle">by GFG Student Chapter Amity University Noida</p>
         <input type="text" id="searchInput" class="search-box" placeholder="Search for participant...">
-
         <div id="loader" class="loader"></div>
         <div class="participant-list-container" id="participantListContainer">
             <div id="participantList"></div>
         </div>
     </div>
-
-    <a href="https://github.com/seenmttai" target="_blank" class="floating-btn">
+    <a href="https://github.com/manan-bhansali" target="_blank" class="floating-btn">
         Created by Manan Bhansali <span class="heart">❤️</span>
     </a>
-
     <script>
         const SUPABASE_URL = 'https://vekkziumelqjndunkpxj.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla2t6aXVtZWxxam5kdW5rcHhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk2MTE3MzgsImV4cCI6MjA1NTE4NzczOH0.XWPYixmR7C_TOLh0Ai7HFmGU07Sa2ryZxeEqrd4zwGg';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const loader = document.getElementById('loader');
         const participantListEl = document.getElementById('participantList');
         const searchInput = document.getElementById('searchInput');
         let allParticipants = [];
-
         async function fetchParticipants() {
             loader.style.display = 'block';
             participantListEl.style.display = 'none';
-            const { data, error } = await supabaseClient
-                .from('participants')
-                .select('*')
-                .order('name', { ascending: true });
-
+            const { data, error } = await supabase.from('participants').select('*').order('name', { ascending: true });
             if (error) {
                 console.error('Error fetching participants:', error);
                 participantListEl.innerHTML = `<p style="color: var(--stark-red);">Error loading data. Check console.</p>`;
@@ -245,7 +92,6 @@
             loader.style.display = 'none';
             participantListEl.style.display = 'block';
         }
-
         function renderParticipants(participants) {
             participantListEl.innerHTML = '';
             if (participants.length === 0) {
@@ -255,61 +101,54 @@
             participants.forEach(p => {
                 const item = document.createElement('div');
                 item.className = 'participant-item';
-                item.setAttribute('data-name', p.name.toLowerCase());
-
                 const nameEl = document.createElement('div');
                 nameEl.className = 'participant-name';
                 nameEl.textContent = p.name;
-                
                 const btn = document.createElement('button');
                 btn.className = 'status-btn';
-                if (p.is_present) {
-                    btn.classList.add('present');
-                    btn.textContent = 'Present';
-                    btn.disabled = true;
-                } else {
-                    btn.classList.add('absent');
-                    btn.textContent = 'Mark Present';
-                    btn.onclick = () => markAsPresent(p.id, btn);
-                }
-
+                updateButtonState(btn, p.is_present);
+                btn.onclick = () => togglePresence(p.id, p.is_present, btn);
                 item.appendChild(nameEl);
                 item.appendChild(btn);
                 participantListEl.appendChild(item);
             });
         }
-
-        async function markAsPresent(id, button) {
-            button.disabled = true;
-            button.textContent = 'Updating...';
-
-            const { error } = await supabaseClient
-                .from('participants')
-                .update({ is_present: true })
-                .eq('id', id);
-
-            if (error) {
-                console.error('Error updating presence:', error);
-                alert('Failed to update. Please try again.');
-                button.disabled = false;
-                button.textContent = 'Mark Present';
-            } else {
+        function updateButtonState(button, isPresent) {
+            if (isPresent) {
                 button.classList.remove('absent');
                 button.classList.add('present');
                 button.textContent = 'Present';
+            } else {
+                button.classList.remove('present');
+                button.classList.add('absent');
+                button.textContent = 'Mark Present';
             }
         }
-        
+        async function togglePresence(id, currentStatus, button) {
+            button.disabled = true;
+            button.textContent = 'Updating...';
+            const newStatus = !currentStatus;
+            const { data, error } = await supabase.from('participants').update({ is_present: newStatus }).eq('id', id).select().single();
+            if (error) {
+                console.error('Error updating presence:', error);
+                alert('Failed to update. Please try again.');
+                updateButtonState(button, currentStatus);
+            } else {
+                const participantIndex = allParticipants.findIndex(p => p.id === id);
+                if (participantIndex !== -1) {
+                    allParticipants[participantIndex].is_present = newStatus;
+                }
+                updateButtonState(button, newStatus);
+                button.onclick = () => togglePresence(id, newStatus, button);
+            }
+            button.disabled = false;
+        }
         searchInput.addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
-            const filteredParticipants = allParticipants.filter(p => 
-                p.name.toLowerCase().includes(searchTerm)
-            );
+            const filteredParticipants = allParticipants.filter(p => p.name.toLowerCase().includes(searchTerm));
             renderParticipants(filteredParticipants);
         });
-
         document.addEventListener('DOMContentLoaded', fetchParticipants);
     </script>
-
 </body>
 </html>
