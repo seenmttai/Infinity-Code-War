@@ -220,7 +220,7 @@
     <script>
         const SUPABASE_URL = 'https://vekkziumelqjndunkpxj.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla2t6aXVtZWxxam5kdW5rcHhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk2MTE3MzgsImV4cCI6MjA1NTE4NzczOH0.XWPYixmR7C_TOLh0Ai7HFmGU07Sa2ryZxeEqrd4zwGg';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         const loader = document.getElementById('loader');
         const participantListEl = document.getElementById('participantList');
@@ -230,7 +230,7 @@
         async function fetchParticipants() {
             loader.style.display = 'block';
             participantListEl.style.display = 'none';
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('participants')
                 .select('*')
                 .order('name', { ascending: true });
@@ -283,7 +283,7 @@
             button.disabled = true;
             button.textContent = 'Updating...';
 
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from('participants')
                 .update({ is_present: true })
                 .eq('id', id);

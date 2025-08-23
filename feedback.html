@@ -186,7 +186,7 @@
     <script>
         const SUPABASE_URL = 'https://vekkziumelqjndunkpxj.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla2t6aXVtZWxxam5kdW5rcHhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk2MTE3MzgsImV4cCI6MjA1NTE4NzczOH0.XWPYixmR7C_TOLh0Ai7HFmGU07Sa2ryZxeEqrd4zwGg';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         const step1 = document.getElementById('step1');
         const step2 = document.getElementById('step2');
@@ -202,7 +202,7 @@
         async function loadParticipants() {
             loader.style.display = 'block';
             participantSelector.innerHTML = '';
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('participants')
                 .select('*')
                 .eq('is_present', true)
@@ -268,7 +268,7 @@
                 return;
             }
 
-            const { error } = await supabase.from('feedback').insert([feedbackData]);
+            const { error } = await supabaseClient.from('feedback').insert([feedbackData]);
 
             if (error) {
                 console.error('Error submitting feedback:', error);
