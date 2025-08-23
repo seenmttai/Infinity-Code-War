@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinity Code War - View Feedback</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        :root {
+            --stark-dark-bg: #111827;
+            --stark-panel-bg: #1F2937;
+            --stark-border: #4B5563;
+            --stark-glow: #00BFFF;
+            --stark-gold: #FFD700;
+            --stark-red: #DC2626;
+            --stark-text: #E5E7EB;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: var(--stark-dark-bg);
+            color: var(--stark-text);
+            background-image:
+                linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)),
+                url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: var(--stark-panel-bg);
+            border: 2px solid var(--stark-glow);
+            border-radius: 10px;
+            box-shadow: 0 0 25px rgba(0, 191, 255, 0.5);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--stark-glow);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px var(--stark-glow);
+        }
+
+        .subtitle { font-size: 1rem; color: var(--stark-gold); margin-bottom: 2rem; }
+        
+        .feedback-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            max-height: 70vh;
+            overflow-y: auto;
+            padding-right: 1rem; 
+        }
+        
+        .feedback-grid::-webkit-scrollbar { width: 8px; }
+        .feedback-grid::-webkit-scrollbar-track { background: var(--stark-dark-bg); }
+        .feedback-grid::-webkit-scrollbar-thumb { background-color: var(--stark-glow); border-radius: 10px; border: 2px solid var(--stark-dark-bg); }
+
+        .feedback-card {
+            background-color: var(--stark-dark-bg);
+            border-left: 5px solid var(--stark-glow);
+            padding: 1.5rem;
+            border-radius: 5px;
+            text-align: left;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--stark-border);
+            padding-bottom: 1rem;
+        }
+        
+        .participant-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--stark-glow);
+        }
+        
+        .rating {
+            font-size: 1.2rem;
+            color: var(--stark-gold);
+        }
+
+        .feedback-content p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .feedback-content strong {
+            color: var(--stark-gold);
+            display: block;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .loader { border: 5px solid var(--stark-border); border-top: 5px solid var(--stark-glow); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 2rem auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .floating-btn { position: fixed; bottom: 20px; right: 20px; background-color: var(--stark-glow); color: var(--stark-dark-bg); padding: 10px 15px; border-radius: 50px; font-size: 0.9rem; box-shadow: 0 0 15px var(--stark-glow); text-decoration: none; font-weight: bold; z-index: 1000; }
+        .heart { display: inline-block; animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .container { padding: 1rem; }
+            .card-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>FEEDBACK LOGS</h1>
+        <p class="subtitle">Mission Debriefs from all participants</p>
+        <div id="loader" class="loader"></div>
+        <div id="feedbackGrid" class="feedback-grid"></div>
+    </div>
+    
+    <a href="https://github.com/seenmttai" target="_blank" class="floating-btn">
+        Created by Manan Bhansali <span class="heart">❤️</span>
+    </a>
+
+    <script>
+        const SUPABASE_URL = 'https://vekkziumelqjndunkpxj.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla2t6aXVtZWxxam5kdW5rcHhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk2MTE3MzgsImV4cCI6MjA1NTE4NzczOH0.XWPYixmR7C_TOLh0Ai7HFmGU07Sa2ryZxeEqrd4zwGg';
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const loader = document.getElementById('loader');
+        const feedbackGrid = document.getElementById('feedbackGrid');
+
+        async function fetchFeedback() {
+            loader.style.display = 'block';
+            feedbackGrid.innerHTML = '';
+
+            const { data, error } = await supabase
+                .from('feedback')
+                .select(`
+                    *,
+                    participants ( name )
+                `)
+                .order('created_at', { ascending: false });
+
+            loader.style.display = 'none';
+            if (error) {
+                console.error('Error fetching feedback:', error);
+                feedbackGrid.innerHTML = `<p style="color: var(--stark-red);">Error loading feedback data.</p>`;
+                return;
+            }
+
+            if (data.length === 0) {
+                feedbackGrid.innerHTML = '<p>No feedback has been submitted yet.</p>';
+                return;
+            }
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'feedback-card';
+
+                const ratingStars = '★'.repeat(item.rating) + '☆'.repeat(5 - item.rating);
+
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="participant-name">${item.participants ? item.participants.name : 'Unknown'}</div>
+                        <div class="rating">${ratingStars}</div>
+                    </div>
+                    <div class="feedback-content">
+                        <p><strong>Liked:</strong> ${item.liked}</p>
+                        <p><strong>Improvement:</strong> ${item.improvement}</p>
+                    </div>
+                `;
+                feedbackGrid.appendChild(card);
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', fetchFeedback);
+    </script>
+
+</body>
+</html>
