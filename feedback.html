@@ -211,9 +211,14 @@
                 canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
                 const textConfig = {
-                    font: "bold 40px 'Audiowide', sans-serif", color: '#1F2937', align: 'center',
-                    baseline: 'middle', x: canvas.width / 2, y: canvas.height / 2.1
+                    font: "400 52px 'Pinyon Script', cursive",
+                    color: '#002D62',
+                    align: 'center',
+                    baseline: 'middle',
+                    x: canvas.width / 2,
+                    y: canvas.height / 2.1
                 };
+
                 ctx.font = textConfig.font;
                 ctx.fillStyle = textConfig.color;
                 ctx.textAlign = textConfig.align;
