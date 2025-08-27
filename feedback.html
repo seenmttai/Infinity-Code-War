@@ -7,9 +7,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Great+Vibes&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Orbitron:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
         :root {
             --stark-dark-bg: #111827; --stark-panel-bg: #1F2937; --stark-border: #4B5563;
             --stark-glow: #00BFFF; --stark-gold: #FFD700; --stark-red: #DC2626; --stark-text: #E5E7EB;
@@ -208,20 +208,19 @@
             const canvas = document.getElementById('certificateCanvas');
             const ctx = canvas.getContext('2d');
             const img = new Image();
-            img.src = 'certificate.png';
+            img.src = 'certificate.jpeg';
             img.onload = () => {
                 canvas.width = img.width;
                 canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
                 const textConfig = {
-                    font: "400 55px 'Great Vibes', cursive",
-                    color: '#002D62',
+                    font: "700 55px 'Montserrat', sans-serif", 
+                    color: '#1F2937', 
                     align: 'center',
-                    baseline: 'middle',
-                    x: canvas.width / 2,
-                    y: canvas.height / 2.1
+                    baseline: 'middle', 
+                    x: canvas.width / 2, 
+                    y: canvas.height / 2.1 
                 };
-
                 ctx.font = textConfig.font;
                 ctx.fillStyle = textConfig.color;
                 ctx.textAlign = textConfig.align;
@@ -237,7 +236,7 @@
         document.getElementById('downloadBtn').addEventListener('click', () => {
             const canvas = document.getElementById('certificateCanvas');
             const link = document.createElement('a');
-            link.download = `InfinityCodeWar_Certificate_${selectedParticipant.name.replace(' ', '_')}.png`;
+            link.download = `InfinityCodeWar_Certificate_${selectedParticipant.name.replace(/\s+/g, '_')}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
         });
